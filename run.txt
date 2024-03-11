@@ -1,1 +1,6 @@
-
+root_ansible-playbook addUser.yaml -i hosts.ini
+root_ansible-playbook installGit.yaml -i hosts.ini
+root_ansible-playbook cloneGitRepos.yaml -i hosts.ini
+root_ansible-playbook installNginx.yaml -i hosts.ini
+root_ansible-playbook playbook.yaml -i hosts.ini
+root_ansible-playbook replaceHTML.yaml -i hosts.ini
