@@ -1,0 +1,39 @@
+- hosts: all
+  gather_facts: no 
+
+  tasks:        
+    - name: update ansible.iphilka.ru.conf
+      ansible.builtin.template:   
+        dest: /etc/nginx/sites-available/ansible.iphilka.ru.conf
+      notify:
+      become: yes
+
+    - name: Create a symbolic link ansible.iphilka.ru.conf
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/ansible.iphilka.ru.conf
+        dest: /etc/nginx/sites-enabled/ansible.iphilka.ru.conf
+        state: link
+      notify:
+      become: yes
+      
+    - name: stopped nginx
+      ansible.builtin.service:
+        name: nginx
+        state: stopped
+      notify:
+        - restart nginx
+      become: yes
+
+    - name: group control ansible-worker
+        name: nginx
+        groups: ansible-worker
+        append: yes
+      notify:
+      become: yes
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+      become: yes
