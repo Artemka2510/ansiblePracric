@@ -1,0 +1,10 @@
+- hosts: all
+  gather_facts: no
+  
+  tasks:
+    - name: write from github
+      ansible.builtin.git:
+        repo: https://github.com/iphilka/stud-template.git
+        dest: /home/ansible-worker/www/stud-template
+      become: yes
+      become_user: ansible-worker
