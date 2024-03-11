@@ -1,0 +1,10 @@
+- hosts: all
+  gather_facts: no 
+
+  tasks:
+      - name: replace index.html from src
+        ansible.builtin.template:
+          src: files/index.html
+          dest: /home/ansible-worker/www/stud-template/index.html
+        become: yes
+        become_user: ansible-worker
