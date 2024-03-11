@@ -1,0 +1,45 @@
+- hosts: all
+  gather_facts: no 
+
+  tasks:
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+      notify:
+        - restart nginx
+      become: yes
+      
+    - name: stopped nginx
+      ansible.builtin.service:
+        name: nginx
+        state: stopped
+      notify:
+        - restart nginx
+      become: yes
+
+    - name: update nginx.conf     
+      ansible.builtin.template:
+      notify:
+        - restart nginx
+      become: yes
+      
+    - name: Create a directory sites-available
+      ansible.builtin.file:
+        path: /etc/nginx/sites-available/
+        state: directory
+      become: yes
+
+    - name: Create a directory sites-enabled
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/             
+        state: directory
+      become: yes
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded            
+      become: yes
