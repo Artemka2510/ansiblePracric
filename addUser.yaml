@@ -1,0 +1,27 @@
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Add user ansible-worker     
+      user:
+        name: ansible-worker
+        state: present
+        generate_ssh_key: yes 
+        ssh_key_file: .ssh/id_rsa
+      become: yes                     
+
+    - name: Add git config file
+      ansible.builtin.template:    
+        src: files/gitconfig
+        dest:  /home/ansible-worker/.gitconfig
+        owner: ansible-worker  
+        group: ansible-worker
+      become: yes
+    
+    - name: Add pub key to user ansible-worker
+      ansible.builtin.template:    
+        src: ssh_keys/id_rsa.pub
+        dest:  /home/ansible-worker/.ssh/authorized_keys
+        owner: ansible-worker
+        group: ansible-worker
+      become: yes
